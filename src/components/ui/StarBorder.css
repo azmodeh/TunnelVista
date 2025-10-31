@@ -1,0 +1,88 @@
+.star-border-container {
+  position: relative;
+  display: inline-block;
+  background-color: hsl(var(--background));
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+.star-border-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      farthest-side at 50% 0,
+      hsla(0, 0%, 100%, 0.5),
+      transparent
+    ),
+    radial-gradient(
+      farthest-side at 50% 100%,
+      hsla(0, 0%, 100%, 0.5),
+      transparent
+    );
+}
+
+.border-gradient-top,
+.border-gradient-bottom {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  width: 10rem;
+  height: 10rem;
+  background: radial-gradient(circle, var(--star-color), transparent 50%);
+  animation: rotate var(--speed) linear infinite;
+  opacity: 0.5;
+}
+
+.border-gradient-top {
+  top: 0;
+  right: 0;
+  transform: translate(50%, -50%);
+}
+
+.border-gradient-bottom {
+  bottom: 0;
+  left: 0;
+  transform: translate(-50%, 50%);
+}
+
+.inner-content {
+  position: relative;
+  z-index: 2;
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+}
+
+@keyframes rotate {
+  from {
+    transform: translate(-50%, 50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, 50%) rotate(360deg);
+  }
+}
+
+.border-gradient-top {
+  animation-name: rotate-top;
+}
+
+@keyframes rotate-top {
+  from {
+    transform: translate(50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(50%, -50%) rotate(360deg);
+  }
+}

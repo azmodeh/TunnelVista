@@ -1,0 +1,26 @@
+diff --git a/node_modules/react-flagpack/dist/index.js b/node_modules/react-flagpack/dist/index.js
+index 45199f3..71f4961 100644
+--- a/node_modules/react-flagpack/dist/index.js
++++ b/node_modules/react-flagpack/dist/index.js
+@@ -32,7 +32,7 @@
+ function Flag(_a) {
+     var code = _a.code, _b = _a.size, size = _b === void 0 ? 'l' : _b, _c = _a.gradient, gradient = _c === void 0 ? '' : _c, _d = _a.hasDropShadow, hasDropShadow = _d === void 0 ? false : _d, _e = _a.hasBorder, hasBorder = _e === void 0 ? true : _e, _f = _a.hasBorderRadius, hasBorderRadius = _f === void 0 ? true : _f, className = _a.className, style = _a.style, props = __rest(_a, ["code", "size", "gradient", "hasDropShadow", "hasBorder", "hasBorderRadius", "className", "style"]);
+     var newStyle = __assign({ 'background-image': "url(https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@latest/svg/" + code.toLowerCase() + ".svg), " + gradient }, style);
+-    var src = "https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@latest/svg/" + code.toLowerCase() + ".svg";
++    var src = "https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@latest/flags/4x3/" + code.toLowerCase() + ".svg";
+     var dropShadowStyle = {
+         filter: 'drop-shadow(0 3px 5px rgba(0,0,0, .2))',
+     };
+diff --git a/node_modules/react-flagpack/src/index.tsx b/node_modules/react-flagpack/src/index.tsx
+index 471015f..c9c61d5 100644
+--- a/node_modules/react-flagpack/src/index.tsx
++++ b/node_modules/react-flagpack/src/index.tsx
+@@ -42,7 +42,7 @@
+     ...style,
+   };
+ 
+-  const src = `https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@latest/svg/${code.toLowerCase()}.svg`;
++  const src = `https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@latest/flags/4x3/${code.toLowerCase()}.svg`;
+ 
+   const dropShadowStyle = {
+     filter: 'drop-shadow(0 3px 5px rgba(0,0,0, .2))',

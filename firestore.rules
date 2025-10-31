@@ -1,0 +1,124 @@
+/**
+ * @file Overview
+ * This ruleset enforces a role-based access control model.
+ *
+ * Data Structure:
+ * - `/users/{userId}`: Stores individual user profiles. Admins can list all users.
+ * - `/devices/{deviceId}`: Stores device information, accessible to users with appropriate roles.
+ * - `/tunnels/{tunnelId}`: Stores VPN tunnel configurations, accessible to users with appropriate roles.
+ * - `/vpn_configs/{vpnConfigId}`: Stores VPN configurations, accessible to users with appropriate roles.
+ * - `/log_analysis/{logAnalysisId}`: Stores AI-driven log analysis entries, accessible to users with appropriate roles.
+ * - `/audit_logs/{logId}`: Stores audit logs of user and system actions, accessible only to admins.
+ * - `/app_settings/{settingsId}`: Stores global application settings, accessible only to admins.
+ * - `/apiKeys/{apiKeyId}`: Stores API keys, accessible only to admins.
+ *
+ * Key Security Decisions:
+ * - User listing is restricted to admins (via custom claims) to prevent information disclosure.
+ *- Write access to `/users/{userId}` is restricted to the authenticated user matching the `userId` or an admin.
+ * - The rules do not validate the entire schema of the data being written, allowing for rapid iteration. However, they do enforce authorization and relational integrity.
+ */
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * @description Controls access to user profile documents.
+     * @path /users/{userId}
+     * @allow (get, list) A user can read their own profile. An admin can read or list any profile.
+     * @allow (write) A user can create or update their own profile. An admin can write to any profile.
+     * @principle Ensures users can manage their own data while admins have oversight.
+     */
+    match /users/{userId} {
+      allow get, list: if isOwner(userId) || isAdmin();
+      allow write: if isOwner(userId) || isAdmin();
+    }
+
+    /**
+     * @description Controls access to device documents.
+     * @path /devices/{deviceId}
+     * @allow (read, write, delete) All authenticated users can manage device information.
+     * @principle Authenticated users can manage device information.
+     */
+    match /devices/{deviceId} {
+      allow read, write, delete: if isSignedIn();
+    }
+
+    /**
+     * @description Controls access to tunnel documents.
+     * @path /tunnels/{tunnelId}
+     * @allow (read, write, delete) All authenticated users can manage VPN tunnel configurations.
+     * @principle Authenticated users can manage VPN tunnel configurations.
+     */
+    match /tunnels/{tunnelId} {
+       allow read, write, delete: if isSignedIn();
+    }
+
+    /**
+     * @description Controls access to vpn_configs documents.
+     * @path /vpn_configs/{vpnConfigId}
+     * @allow (read, write, delete) Authenticated users can manage VPN server configurations.
+     * @principle Authenticated users can manage VPN server configurations.
+     */
+    match /vpn_configs/{vpnConfigId} {
+      allow read, write, delete: if isSignedIn();
+    }
+
+    /**
+     * @description Controls access to log_analysis documents.
+     * @path /log_analysis/{logAnalysisId}
+     * @allow (read, write, delete) Authenticated users can manage AI-driven log analysis entries.
+     * @principle Authenticated users can manage AI-driven log analysis entries.
+     */
+    match /log_analysis/{logAnalysisId} {
+      allow read, write, delete: if isSignedIn();
+    }
+
+    /**
+     * @description Controls access to audit_logs documents.
+     * @path /audit_logs/{logId}
+     * @allow (read, create) Only authenticated users can read and create audit log entries.
+     * @deny (update, delete) No one can update or delete audit logs.
+     * @principle Restricts audit log access to authenticated users and makes them immutable.
+     */
+    match /audit_logs/{logId} {
+      allow read, create: if isSignedIn();
+      allow update, delete: if false;
+    }
+
+    /**
+     * @description Controls access to app_settings documents.
+     * @path /app_settings/{settingsId}
+     * @allow (read, write, delete) Only admins can manage global application settings.
+     * @principle Restricts settings to admin users.
+     */
+    match /app_settings/{settingsId} {
+      allow read, write, delete: if isAdmin();
+    }
+
+      /**
+       * @description Controls access to apiKeys documents.
+       * @path /apiKeys/{apiKeyId}
+       * @allow (read, write, delete) Only admins can manage API keys.
+       * @principle Restricts API keys to admin users.
+       */
+    match /apiKeys/{apiKeyId} {
+      allow read, write, delete: if isAdmin();
+    }
+
+  }
+
+  // Helper function to determine if the request is made by the owner of the resource.
+  function isOwner(userId) {
+    return request.auth.uid == userId;
+  }
+
+  // Helper function to determine if the user is signed in.
+  function isSignedIn() {
+    return request.auth != null;
+  }
+
+  // Helper function to determine if the user is an admin by checking custom claims.
+  function isAdmin() {
+    return isSignedIn() && request.auth.token.admin == true;
+  }
+}

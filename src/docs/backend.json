@@ -1,0 +1,238 @@
+{
+  "entities": {
+    "Device": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Device",
+      "type": "object",
+      "description": "Represents a network device (MikroTik/Linux).",
+      "properties": {
+        "name": { "type": "string", "description": "The name of the device." },
+        "ip": { "type": "string", "description": "The public IP address of the device." },
+        "type": { "type": "string", "enum": ["mikrotik", "linux"], "description": "The type of the device." },
+        "status": { "type": "string", "enum": ["online", "offline", "error"], "description": "The current status of the device." },
+        "location": { "type": "string", "description": "The geographical location of the device (e.g., 'Shiraz, Iran')." },
+        "country_code": { "type": "string", "description": "The two-letter ISO country code." },
+        "last_seen": { "type": "string", "format": "date-time", "description": "Timestamp of the last time the device was seen online." },
+        "x": { "type": "number", "description": "X-coordinate for topology graph." },
+        "y": { "type": "number", "description": "Y-coordinate for topology graph." },
+        "ping_ms": { "type": ["number", "null"], "description": "Last measured ping in milliseconds." },
+        "ping_status": { "type": "string", "enum": ["good", "slow", "down"], "description": "Status of the last ping." },
+        "last_ping": { "type": ["string", "null"], "format": "date-time", "description": "Timestamp of the last manual or automatic ping." },
+        "username": { "type": "string", "description": "Username for device access." },
+        "password": { "type": "string", "description": "Password for device access (should be stored securely)." },
+        "ssh_key": { "type": "string", "description": "SSH key for device access." },
+        "api_key": { "type": "string", "description": "API key for services like Cloudflare." },
+        "tags": { "type": "array", "items": { "type": "string" }, "description": "User-defined tags for organization." },
+        "cloudflare_subdomain": { "type": "string", "description": "Associated Cloudflare subdomain for the device." },
+        "local_ips": { "type": "array", "items": { "type": "string" }, "description": "List of local IP ranges (CIDR) managed by the device." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the device was created." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Timestamp when the device was last updated." }
+      },
+      "required": ["name", "ip", "type", "status", "username", "createdAt", "updatedAt"]
+    },
+    "Tunnel": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Tunnel",
+      "type": "object",
+      "description": "Represents a VPN tunnel.",
+      "properties": {
+        "sourceDeviceId": { "type": "string", "description": "The ID of the source device." },
+        "destinationDeviceId": { "type": "string", "description": "The ID of the destination device." },
+        "intermediateDeviceId": { "type": "string", "description": "The ID of the intermediate device, if any." },
+        "protocol": { "type": "string", "enum": ["WireGuard", "OpenVPN", "IKEv2", "L2TP", "Trojan (WS/Reality)", "VLESS (WS)", "6TO4", "IPIP", "GRE", "IPIPV6", "GRE6", "MIX IPIPV6"], "description": "The VPN protocol used." },
+        "status": { "type": "string", "enum": ["active", "inactive"], "description": "The current status of the tunnel." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the tunnel was created." }
+      },
+      "required": ["sourceDeviceId", "destinationDeviceId", "protocol", "status", "createdAt"]
+    },
+    "VpnConfig": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "VpnConfig",
+        "type": "object",
+        "description": "Represents a VPN server configuration on a device.",
+        "properties": {
+          "deviceId": { "type": "string", "description": "The ID of the device this config belongs to." },
+          "protocol": { "type": "string", "enum": ["WireGuard", "OpenVPN", "L2TP", "IKEv2", "Trojan (WS/Reality)", "VLESS (WS)"], "description": "The VPN protocol." },
+          "interfaceName": { "type": "string", "description": "Name of the VPN interface." },
+          "listenPort": { "type": "number", "description": "The port the VPN service listens on." },
+          "allowedIPs": { "type": "string", "description": "CIDR range of allowed IPs for clients." },
+          "status": { "type": "string", "enum": ["deployed", "pending", "failed", "undeployed", "deploying", "restarting"], "description": "The deployment status of the VPN config." },
+          "activePeers": { "type": "number", "description": "Number of currently active peers/clients." },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["deviceId", "protocol", "interfaceName", "listenPort", "allowedIPs", "status"]
+    },
+    "User": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "User",
+      "type": "object",
+      "description": "Represents a user of the application.",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier for the User entity." },
+        "username": { "type": "string", "description": "The username of the user." },
+        "email": { "type": "string", "description": "The email address of the user.", "format": "email" },
+        "role": { "type": "string", "enum": ["admin", "operator", "user"], "description": "The role of the user." },
+        "status": { "type": "string", "enum": ["active", "suspended", "expired"], "description": "The status of the user account." },
+        "customClaims": {
+          "type": "object",
+          "properties": {
+            "admin": {
+              "type": "boolean"
+            }
+          }
+        }
+      },
+      "required": [ "id", "username", "email", "role", "status" ]
+    },
+    "LogAnalysis": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "LogAnalysis",
+      "type": "object",
+      "description": "Represents a log analysis entry.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the LogAnalysis entity."
+        },
+        "deviceId": {
+          "type": "string",
+          "description": "Reference to the Device that generated the log. (Relationship: Device 1:N LogAnalysis)"
+        },
+        "logMessage": {
+          "type": "string",
+          "description": "The raw log message that was analyzed."
+        },
+        "analysisResult": {
+          "type": "string",
+          "description": "A summary of the AI analysis."
+        },
+        "problemDetected": {
+            "type": "boolean",
+            "description": "Whether the AI detected a problem in the logs."
+        },
+        "problemDescription": {
+            "type": "string",
+            "description": "A detailed description of the detected problem."
+        },
+        "suggestedSolutions": {
+            "type": "string",
+            "description": "AI-suggested solutions for the detected problem."
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "The timestamp of when the analysis was performed.",
+          "format": "date-time"
+        }
+      },
+      "required": [ "id", "logMessage", "analysisResult", "timestamp" ]
+    },
+    "AuditLog": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AuditLog",
+      "type": "object",
+      "description": "Represents an audit trail entry for user and system actions.",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier for the audit log entry." },
+        "userId": { "type": "string", "description": "The ID of the user who performed the action." },
+        "userEmail": { "type": "string", "description": "The email of the user who performed the action." },
+        "action": { "type": "string", "description": "A machine-readable string identifying the action (e.g., 'create_device')." },
+        "details": { "type": "string", "description": "A human-readable description of the action (e.g., 'Created device router-1')." },
+        "targetId": { "type": "string", "description": "The ID of the entity that was affected (e.g., device ID, user ID)." },
+        "timestamp": { "type": "string", "format": "date-time", "description": "Timestamp when the action occurred." }
+      },
+      "required": ["id", "userId", "userEmail", "action", "details", "timestamp"]
+    },
+    "AppSettings": {
+        "$schema": "http://json-schema.org/draft-07/schema#",
+        "title": "AppSettings",
+        "type": "object",
+        "description": "Represents global application settings.",
+        "properties": {
+            "id": { "type": "string", "description": "Unique identifier for the settings document." },
+            "appDomain": { "type": "string", "description": "The primary domain of the application." },
+            "theme": { "type": "string", "enum": ["dark", "light"], "description": "The UI theme." },
+            "logRetention": { "type": "number", "description": "Number of days to retain logs." },
+            "pollingInterval": { "type": "number", "description": "Interval in seconds for device polling." },
+            "cloudflareEmail": { "type": "string", "format": "email", "description": "Cloudflare account email." },
+            "cloudflareKey": { "type": "string", "description": "Cloudflare API key." },
+            "cloudflareZoneId": { "type": "string", "description": "Cloudflare Zone ID." },
+            "openaiEndpoint": { "type": "string", "description": "The endpoint for the OpenAI-compatible API." },
+            "openaiModel": { "type": "string", "description": "The model ID to use for AI features." },
+            "openaiToken": { "type": "string", "description": "API token for the AI service." },
+            "dbDriver": { "type": "string", "description": "Database driver (e.g., 'postgresql')." },
+            "dbHost": { "type": "string", "description": "Database host." },
+            "dbPort": { "type": "number", "description": "Database port." },
+            "dbUser": { "type": "string", "description": "Database username." },
+            "dbPassword": { "type": "string", "description": "Database password." },
+            "dbName": { "type": "string", "description": "Database name." },
+            "emailEnabled": { "type": "boolean", "description": "Whether email notifications are enabled." },
+            "emailAddress": { "type": "string", "format": "email", "description": "Recipient email for notifications." },
+            "webhookEnabled": { "type": "boolean", "description": "Whether webhook notifications are enabled." },
+            "webhookUrl": { "type": "string", "description": "The URL for webhook notifications." },
+            "enabledEvents": { "type": "array", "items": { "type": "string" }, "description": "List of events that trigger notifications." }
+        },
+        "required": ["id"]
+    },
+    "ApiKey": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "ApiKey",
+      "type": "object",
+      "description": "Represents a user-generated API key for programmatic access.",
+      "properties": {
+        "keyId": { "type": "string", "description": "A short, non-secret unique identifier for the key." },
+        "hashedKey": { "type": "string", "description": "The securely hashed API key." },
+        "userId": { "type": "string", "description": "The ID of the user who owns this key." },
+        "scope": { "type": "string", "description": "The permission scope of the key (e.g., 'read', 'write')." },
+        "expires": { "type": "string", "format": "date-time", "description": "The expiration timestamp of the key." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the key was created." }
+      },
+      "required": ["keyId", "hashedKey", "userId", "scope", "expires", "createdAt"]
+    }
+  },
+  "auth": {
+    "providers": [
+      "google.com",
+      "password"
+    ],
+    "customClaims": {
+        "admin": {
+            "type": "boolean"
+        }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "Stores user profiles. The document ID is the Firebase Auth user ID."
+    },
+    "/devices/{deviceId}": {
+      "schema": { "$ref": "#/entities/Device" },
+      "description": "Stores device information."
+    },
+    "/tunnels/{tunnelId}": {
+      "schema": { "$ref": "#/entities/Tunnel" },
+      "description": "Stores VPN tunnel configurations for all devices."
+    },
+    "/vpn_configs/{vpnConfigId}": {
+      "schema": { "$ref": "#/entities/VpnConfig" },
+      "description": "Stores all VPN server configurations for all devices."
+    },
+    "/log_analysis/{logAnalysisId}": {
+      "schema": { "$ref": "#/entities/LogAnalysis" },
+      "description": "Stores log analysis entries."
+    },
+    "/audit_logs/{logId}": {
+      "schema": { "$ref": "#/entities/AuditLog" },
+      "description": "Stores audit trail entries for important user and system actions."
+    },
+    "/app_settings/{settingsId}": {
+      "schema": { "$ref": "#/entities/AppSettings" },
+      "description": "Stores global application settings. Accessible by admins."
+    },
+    "/apiKeys/{apiKeyId}": {
+      "schema": { "$ref": "#/entities/ApiKey" },
+      "description": "Stores hashed API keys for programmatic access. Only accessible by admins."
+    }
+  }
+}
