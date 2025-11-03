@@ -1,35 +1,28 @@
 'use client';
+    import { ButtonHTMLAttributes } from 'react';
+    import { motion } from 'framer-motion';
 
-import React from 'react';
-import { motion } from 'framer-motion';
-import { cn } from '@/lib/utils';
-import { Button } from './button';
-
-interface AuroraButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  children: React.ReactNode;
-  className?: string;
-}
-
-export const AuroraButton = ({ children, className, ...props }: AuroraButtonProps) => {
-  return (
-    <Button
-      className={cn(
-        'relative overflow-hidden rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 p-px text-white transition-all duration-300 hover:shadow-[0_0_2rem_-0.5rem_#6366f1] disabled:opacity-50',
-        className
-      )}
-      {...props}
-    >
-      <span className="relative z-10">{children}</span>
-      <motion.div
-        className="absolute inset-0 bg-[radial-gradient(40%_128px_at_50%_0%,theme(backgroundColor.white/10%),transparent)]"
-        initial={{ opacity: 0, y: '100%' }}
-        animate={{ opacity: 1, y: '40%' }}
-        exit={{ opacity: 0, y: '100%' }}
-        transition={{
-          duration: 0.5,
-          ease: 'easeOut',
-        }}
-      />
-    </Button>
-  );
-};
+    export const AuroraButton = ({
+      children,
+      variant = 'primary',
+      className,
+      ...props
+    }: ButtonHTMLAttributes&lt;HTMLButtonElement&gt; & { variant?: 'primary' | 'secondary', className?: string }) => (
+      &lt;motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        className={`
+          px-6 py-3 rounded-xl font-bold text-sm transition-all
+          ${variant === 'primary'
+            ? 'bg-cyan-500 hover:bg-cyan-400 text-black'
+            : 'bg-white/10 hover:bg-white/20 text-white border border-white/30'
+          }
+          flex items-center justify-center gap-2
+          rtl:flex-row-reverse
+          ${className}
+        `}
+        {...props}
+      &gt;
+        {children}
+      &lt;/motion.button&gt;
+    );

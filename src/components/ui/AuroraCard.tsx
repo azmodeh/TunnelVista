@@ -1,37 +1,14 @@
-import * as React from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+    import { motion } from "framer-motion";
+    import React from "react";
 
-interface AuroraCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode;
-}
-
-const AuroraCard = React.forwardRef<HTMLDivElement, AuroraCardProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        whileHover={{
-          scale: 1.02,
-          boxShadow: "0 0 25px rgba(14, 165, 233, 0.5)",
-          borderColor: "rgba(14, 165, 233, 0.7)",
-        }}
-        className={cn(
-          "bg-glass backdrop-blur-xl rounded-2xl p-6 border border-white/10 transition-all",
-          "shadow-lg shadow-black/20",
-          className
-        )}
-        ref={ref}
-        {...props}
-      >
-        {children}
-      </motion.div>
+    export const AuroraCard = ({ children, className }: { children: React.ReactNode; className?: string }) => (
+        &lt;div className={cn(`
+            bg-white/10 backdrop-blur-xl border border-white/20
+            rounded-2xl p-6 shadow-2xl
+            transition-all duration-300 hover:shadow-cyan-500/25
+            `, className)}
+        &gt;
+            {children}
+        &lt;/div&gt;
     );
-  }
-);
-
-AuroraCard.displayName = "AuroraCard";
-
-export { AuroraCard };

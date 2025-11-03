@@ -1,19 +1,42 @@
-import { getSession } from '@/lib/auth';
-import { redirect } from 'next/navigation';
+'use client';
+    import { AuroraCard } from '@/components/ui/AuroraCard';
+    import { AuroraButton } from '@/components/ui/AuroraButton';
+    import Flag from 'react-country-flag';
+    import { motion } from 'framer-motion';
 
-export default async function TunnelVistaPage() {
-  const session = await getSession();
+    export default function TunnelVista() {
+      return (
+        &lt;div dir="ltr" className="min-h-screen bg-gradient-to-b from-[#0A0F1E] to-[#16213E] p-6 font-inter"&gt;
+          &lt;AuroraCard className="max-w-md mx-auto"&gt;
+            &lt;motion.h1
+              initial={{ opacity:0, y:-20 }}
+              animate={{ opacity:1, y:0 }}
+              className="text-3xl font-bold text-center text-white mb-6"
+            &gt;
+              Your Config is Ready!
+            &lt;/motion.h1&gt;
 
-  // Redirect if no session or user is not an admin
-  if (!session || session.admin !== true) {
-    redirect('/uservista');
-  }
-  
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold">داشبورد ادمین (TunnelVista)</h1>
-      <p>خوش آمدید، {session?.email}</p>
-      <p className="mt-4 bg-primary/10 p-4 rounded-lg border border-primary/20">اینجا داشبورد ادمین است. فقط کاربران با نقش `admin` به این صفحه دسترسی دارند.</p>
-    </div>
-  );
-}
+            &lt;div className="flex items-center gap-4 mb-6"&gt;
+              &lt;Flag countryCode="DE" svg className="w-16 h-12 rounded-lg shadow-lg" /&gt;
+              &lt;div&gt;
+                &lt;p className="text-lg text-white"&gt;Frankfurt 1&lt;/p&gt;
+                &lt;p className="text-sm text-teal-400"&gt;Ping: 42ms&lt;/p&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
+
+            &lt;pre className="bg-black/40 p-4 rounded-xl text-xs text-cyan-300 overflow-x-auto font-mono text-left"&gt;
+              [Interface]{"\n"}PrivateKey = xxxxxxxxxxxxxxxxxxxxxxxx
+            &lt;/pre&gt;
+
+            &lt;div className="flex gap-3 mt-6"&gt;
+              &lt;AuroraButton className="flex-1"&gt;
+                Copy Config
+              &lt;/AuroraButton&gt;
+              &lt;AuroraButton variant="secondary" className="flex-1"&gt;
+                QR Code
+              &lt;/AuroraButton&gt;
+            &lt;/div&gt;
+          &lt;/AuroraCard&gt;
+        &lt;/div&gt;
+      );
+    }

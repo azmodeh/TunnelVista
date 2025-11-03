@@ -1,24 +1,42 @@
-import { getSession } from '@/lib/auth';
-import { redirect } from 'next/navigation';
+'use client';
+    import { AuroraCard } from '@/components/ui/AuroraCard';
+    import { AuroraButton } from '@/components/ui/AuroraButton';
+    import Flag from 'react-country-flag';
+    import { motion } from 'framer-motion';
 
-export default async function UserVistaPage() {
-  const session = await getSession();
+    export default function UserVista() {
+      return (
+        &lt;div dir="rtl" className="min-h-screen bg-gradient-to-b from-[#0A0F1E] to-[#16213E] p-6"&gt;
+          &lt;AuroraCard className="max-w-md mx-auto"&gt;
+            &lt;motion.h1
+              initial={{ opacity:0, y:-20 }}
+              animate={{ opacity:1, y:0 }}
+              className="text-3xl font-bold text-center text-white mb-6"
+            &gt;
+              کانفیگ شما آماده است!
+            &lt;/motion.h1&gt;
 
-  // If there's no session, redirect to login. This is a server-side check.
-  if (!session) {
-    redirect('/auth/login');
-  }
+            &lt;div className="flex items-center gap-4 mb-6"&gt;
+              &lt;Flag countryCode="IR" svg className="w-16 h-12 rounded-lg shadow-lg" /&gt;
+              &lt;div className="text-right"&gt;
+                &lt;p className="text-lg text-white font-bold"&gt;تهران ۱&lt;/p&gt;
+                &lt;p className="text-sm text-teal-400"&gt;پینگ: ۲۸ میلی‌ثانیه&lt;/p&gt;
+              &lt;/div&gt;
+            &lt;/div&gt;
 
-  return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold">پنل کاربری (UserVista)</h1>
-      <p>خوش آمدید، {session?.email}</p>
-      <div className="mt-4 bg-accent/10 p-4 rounded-lg border border-accent/20">
-        <p>اینجا پنل کاربری شماست. می‌توانید کانفیگ‌های VPN خود را در اینجا مشاهده و دانلود کنید.</p>
-        <pre className="mt-4 p-2 bg-background/50 rounded text-xs text-muted-foreground whitespace-pre-wrap">
-          {JSON.stringify(session, null, 2)}
-        </pre>
-      </div>
-    </div>
-  );
-}
+            &lt;pre className="bg-black/40 p-4 rounded-xl text-xs text-cyan-300 overflow-x-auto font-mono text-left"&gt;
+              [Interface]{"\n"}PrivateKey = xxxxxxxxxxxxxxxxxxxxxxxx
+            &lt;/pre&gt;
+
+            &lt;div className="flex gap-3 mt-6"&gt;
+              &lt;AuroraButton className="flex-1"&gt;
+                کپی کانفیگ
+              &lt;/AuroraButton&gt;
+              &lt;AuroraButton variant="secondary" className="flex-1"&gt;
+                QR کد
+              &lt;/AuroraButton&gt;
+            &lt;/div&gt;
+          &lt;/AuroraCard&gt;
+        &lt;/div&gt;
+      );
+    }
