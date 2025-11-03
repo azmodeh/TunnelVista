@@ -1,4 +1,3 @@
-
 export async function getGeoDataForIp(ip: string): Promise<{ location: string; country_code: string }> {
   // This is a mock function. In a real app, this would call a Geo-IP service API.
   await new Promise(resolve => setTimeout(resolve, 50));
