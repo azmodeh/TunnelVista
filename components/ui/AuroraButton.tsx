@@ -77,6 +77,7 @@
       "devDependencies": {
         "@types/node": "^20",
         "@types/react": "^18",
+        "@types/react-country-flag": "^1.1.0",
         "@types/react-dom": "^18",
         "@types/react-google-recaptcha": "^2.1.9",
         "dotenv": "^16.4.5",
