@@ -1,17 +1,16 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import { Toaster } from '@/components/ui/toaster';
-import { Header } from '@/components/layout/header';
-import { useUser } from '@/firebase/auth/use-user';
-import { FirebaseClientProvider } from '@/firebase/client-provider';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import Sidebar from "@/components/layout/Sidebar";
+import { Toaster } from "@/components/ui/toaster";
+import { Header } from "@/components/layout/header";
+import { FirebaseClientProvider } from "@/firebase/client-provider";
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-// Vazirmatn is imported in globals.css
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
-  title: 'TunnelVista',
-  description: 'Secure, blazing-fast, invisible tunnel — one tap away',
+  title: "TunnelVista",
+  description: "Secure, blazing-fast, invisible tunnel — one tap away",
 };
 
 export default function RootLayout({
