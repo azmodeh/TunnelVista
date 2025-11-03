@@ -34,14 +34,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    serverActions: {
-      allowedOrigins: [
-        "6000-firebase-studio-1761218187412.cluster-qmsugz722jg6qxf6wapsr2r5hc.cloudworkstations.dev"
-      ],
-    },
-    allowedDevOrigins: ["6000-firebase-studio-1761218187412.cluster-qmsugz722jg6qxf6wapsr2r5hc.cloudworkstations.dev"],
-  },
   async headers() {
     return [
       {
