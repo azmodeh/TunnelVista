@@ -1,29 +1,39 @@
-import type { Metadata } from "next";
-    import { Inter } from "next/font/google";
-    import "./globals.css";
-    import Sidebar from "@/components/layout/Sidebar";
-    import { usePathname } from "next/navigation";
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import './globals.css';
+import { Toaster } from '@/components/ui/toaster';
+import { Header } from '@/components/layout/header';
+import { useUser } from '@/firebase/auth/use-user';
+import { FirebaseClientProvider } from '@/firebase/client-provider';
 
-    const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+// Vazirmatn is imported in globals.css
 
-    export const metadata: Metadata = {
-      title: "TunnelVista",
-      description: "Secure, blazing-fast, invisible tunnel — one tap away",
-    };
+export const metadata: Metadata = {
+  title: 'TunnelVista',
+  description: 'Secure, blazing-fast, invisible tunnel — one tap away',
+};
 
-    export default function RootLayout({
-      children,
-    }: Readonly&lt;{
-      children: React.ReactNode;
-    }>) {
-      return (
-        &lt;html lang="fa" dir="rtl"&gt;
-          &lt;body className={`${inter.className} dark bg-gray-900 text-white flex`}&gt;
-              &lt;Sidebar /&gt;
-              &lt;main className="flex-1 p-8"&gt;
-                  {children}
-              &lt;/main&gt;
-          &lt;/body&gt;
-        &lt;/html&gt;
-      );
-    }
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${inter.variable} dark bg-background font-inter text-foreground`}
+      >
+        <FirebaseClientProvider>
+            <div className="flex min-h-screen w-full flex-col">
+              <Header />
+              <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+                {children}
+              </main>
+            </div>
+            <Toaster />
+        </FirebaseClientProvider>
+      </body>
+    </html>
+  );
+}

@@ -1,90 +1,28 @@
-{
-      "name": "nextn",
-      "version": "0.1.0",
-      "private": true,
-      "scripts": {
-        "dev": "next dev",
-        "build": "next build",
-        "start": "next start",
-        "lint": "next lint"
-      },
-      "dependencies": {
-        "@hookform/resolvers": "^3.9.0",
-        "@radix-ui/react-accordion": "^1.2.0",
-        "@radix-ui/react-alert-dialog": "^1.1.1",
-        "@radix-ui/react-avatar": "^1.1.0",
-        "@radix-ui/react-checkbox": "^1.1.1",
-        "@radix-ui/react-collapsible": "^1.1.0",
-        "@radix-ui/react-dialog": "^1.1.1",
-        "@radix-ui/react-dropdown-menu": "^2.1.1",
-        "@radix-ui/react-label": "^2.1.0",
-        "@radix-ui/react-menubar": "^1.1.1",
-        "@radix-ui/react-popover": "^1.1.1",
-        "@radix-ui/react-progress": "^1.1.0",
-        "@radix-ui/react-radio-group": "^1.2.0",
-        "@radix-ui/react-scroll-area": "^1.1.0",
-        "@radix-ui/react-select": "^2.1.1",
-        "@radix-ui/react-separator": "^1.1.0",
-        "@radix-ui/react-slider": "^1.2.0",
-        "@radix-ui/react-slot": "^1.1.0",
-        "@radix-ui/react-switch": "^1.1.0",
-        "@radix-ui/react-tabs": "^1.1.0",
-        "@radix-ui/react-toast": "^1.2.1",
-        "@radix-ui/react-tooltip": "^1.1.2",
-        "@tanstack/react-query": "^5.51.1",
-        "axios": "^1.7.2",
-        "chalk": "^5.3.0",
-        "chart.js": "^4.4.3",
-        "chartjs-adapter-date-fns": "^3.0.0",
-        "class-variance-authority": "^0.7.0",
-        "clsx": "^2.1.1",
-        "cmdk": "^1.0.0",
-        "commander": "^12.1.0",
-        "date-fns": "^3.6.0",
-        "embla-carousel-react": "^8.1.7",
-        "firebase": "^10.12.4",
-        "firebase-admin": "^12.2.0",
-        "framer-motion": "^11.3.17",
-        "jose": "^5.6.3",
-        "lottie-react": "^2.4.0",
-        "lucide-react": "^0.414.0",
-        "next": "14.2.5",
-        "next-auth": "4.24.7",
-        "next-i18next": "^15.3.0",
-        "ogl": "^0.0.109",
-        "qrcode.react": "^3.1.0",
-        "react": "^18",
-        "react-chartjs-2": "^5.2.0",
-        "react-country-flag": "^3.1.0",
-        "react-day-picker": "^8.10.1",
-        "react-dom": "^18",
-        "react-flagpack": "^2.0.4",
-        "react-google-recaptcha": "^3.1.0",
-        "react-hook-form": "^7.52.1",
-        "react-hot-toast": "^2.4.1",
-        "react-icons": "^5.2.1",
-        "react-parallax-tilt": "^1.7.228",
-        "react-qr-scanner": "^1.0.0-alpha.11",
-        "react-responsive": "^10.0.0",
-        "reactflow": "^11.11.4",
-        "recharts": "^2.12.7",
-        "tailwind-merge": "^2.4.0",
-        "tailwindcss-animate": "^1.0.7",
-        "use-debounce": "^10.0.1",
-        "uuid": "^10.0.0",
-        "zod": "^3.23.8"
-      },
-      "devDependencies": {
-        "@types/node": "^20",
-        "@types/react": "^18",
-        "@types/react-country-flag": "^1.1.0",
-        "@types/react-dom": "^18",
-        "@types/react-google-recaptcha": "^2.1.9",
-        "dotenv": "^16.4.5",
-        "eslint": "^8",
-        "eslint-config-next": "14.2.5",
-        "postcss": "^8",
-        "tailwindcss": "^3.4.1",
-        "typescript": "^5"
+'use client';
+import { ButtonHTMLAttributes } from 'react';
+import { motion } from 'framer-motion';
+
+export const AuroraButton = ({
+  children,
+  variant = 'primary',
+  className,
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & { variant?: 'primary' | 'secondary', className?: string }) => (
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className={`
+      px-6 py-3 rounded-xl font-bold text-sm transition-all
+      ${variant === 'primary'
+        ? 'bg-cyan-500 hover:bg-cyan-400 text-black'
+        : 'bg-white/10 hover:bg-white/20 text-white border border-white/30'
       }
-    }
+      flex items-center justify-center gap-2
+      rtl:flex-row-reverse
+      ${className}
+    `}
+    {...props}
+  >
+    {children}
+  </motion.button>
+);
