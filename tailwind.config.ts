@@ -7,7 +7,7 @@ const config = {
     './components/**/*.{ts,tsx}',
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
-  ],
+	],
   prefix: "",
   theme: {
     container: {
@@ -52,10 +52,6 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        'aurora-500': '#0ea5e9',
-        'aurora-800': '#1e3a8a',
-        'aurora-900': '#1e293b',
-        glass: 'rgba(255, 255, 255, 0.12)',
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -72,31 +68,25 @@ const config = {
           to: { height: "0" },
         },
         "aurora-gradient": {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '0%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' },
+          '100%': { backgroundPosition: '0% 50%' },
         },
-        "enter-card": {
-          '0%': { opacity: '0', transform: 'translateY(20px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+        'enter-card': {
+          '0%': { transform: 'scale(0.95) translateY(10px)', opacity: '0' },
+          '100%': { transform: 'scale(1) translateY(0)', opacity: '1' },
         },
-        "pulse-glow": {
-          '0%, 100%': { boxShadow: '0 0 0 0 rgba(14, 165, 233, 0.4)' },
-          '50%': { boxShadow: '0 0 20px 10px rgba(14, 165, 233, 0)' },
+        'pulse-glow': {
+          '0%, 100%': { boxShadow: '0 0 0 0 rgba(22, 163, 74, 0.7)' },
+          '50%': { boxShadow: '0 0 12px 3px rgba(22, 163, 74, 0)' },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
-        "aurora-gradient": "aurora-gradient 20s ease infinite",
-        "enter-card": "enter-card 0.6s ease-out forwards",
-        "pulse-glow": "pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-      },
-      fontFamily: {
-        sans: ["var(--font-inter)"],
-        vazir: ["var(--font-vazirmatn)"],
-      },
-      backgroundSize: {
-        '200%': '200% 200%',
+        'aurora-gradient': 'aurora-gradient 20s ease-in-out infinite',
+        'enter-card': 'enter-card 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        'pulse-glow': 'pulse-glow 2s ease-out infinite',
       },
     },
   },

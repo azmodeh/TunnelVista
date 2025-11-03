@@ -1,12 +1,26 @@
 {
-    "invalidEmail": "آدرس ایمیل نامعتبر است",
-    "required": "این فیلد الزامی است",
-    "subscriptionSuccess": "اشتراک با موفقیت انجام شد! ایمیل خود را بررسی کنید.",
-    "subscriptionError": "اشتراک ناموفق بود. لطفاً دوباره تلاش کنید.",
-    "messageMin": "پیام باید حداقل ۱۰ کاراکتر باشد",
-    "recaptchaError": "تأیید reCAPTCHA ناموفق بود.",
-    "contactSuccess": "پیام ارسال شد! به زودی با شما تماس خواهیم گرفت.",
-    "contactError": "ارسال پیام ناموفق بود. لطفاً دوباره تلاش کنید.",
-    "newsletterSubscribed": "در خبرنامه مشترک شدید!",
-    "newsletterError": "اشتراک در خبرنامه ناموفق بود. لطفاً دوباره تلاش کنید."
+  "form": {
+    "validation": {
+      "string": {
+        "min": "این فیلد باید حداقل {{min}} کاراکتر باشد",
+        "email": "لطفا یک آدرس ایمیل معتبر وارد کنید"
+      }
+    }
+  },
+  "toast": {
+    "success": "عملیات با موفقیت انجام شد.",
+    "error": "خطایی غیرمنتظره رخ داد."
+  },
+  "topologyTitle": "توپولوژی",
+  "deployTitle": "استقرار VPN",
+  "profileTitle": "پروفایل",
+  "settingsTitle": "تنظیمات",
+  "deploying": "در حال استقرار...",
+  "oneClickSecure": "یک کلیک تا تونل امن",
+  "deployNow": "استقرار",
+  "plan": "پلن: پرمیوم",
+  "usage": "مصرف: 8.2 GB",
+  "autoConnect": "اتصال خودکار",
+  "language": "زبان",
+  "darkMode": "تم تاریک"
 }
