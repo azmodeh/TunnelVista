@@ -2,34 +2,34 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   createUserWithEmailAndPassword,
+  updateProfile,
   signInWithPopup,
   GoogleAuthProvider,
   type User as FirebaseUser,
 } from 'firebase/auth';
-import { getFirebaseAuth } from '@/firebase';
+import { auth } from '@/firebase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { FcGoogle } from 'react-icons/fc';
-import { Loader2, ShieldCheck } from 'lucide-react';
-import Link from 'next/link';
+import { Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-export default function SignupPage() {
+const SignUpPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState<boolean | 'google'>(false);
+  const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean | 'google'>(false);
   const router = useRouter();
-
-  const auth = getFirebaseAuth();
 
   const handleSuccessfulLogin = async (user: FirebaseUser) => {
     try {
       const idToken = await user.getIdToken();
 
-      // Create user document and session cookie via API routes
       await fetch('/api/user/create', {
         method: 'POST',
         headers: { Authorization: `Bearer ${idToken}` },
@@ -41,30 +41,35 @@ export default function SignupPage() {
       });
 
       router.push('/uservista');
-      router.refresh(); // Ensure server-side state is updated
+      router.refresh();
     } catch (apiError: any) {
        setError(apiError.message || 'Failed to complete signup.');
        setLoading(false);
     }
   };
 
-  const handleSignup = async (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     setError(null);
+    setLoading(true);
+
+    if (password.length < 6) {
+      setError('Password should be at least 6 characters.');
+      setLoading(false);
+      return;
+    }
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, { displayName });
       await handleSuccessfulLogin(userCredential.user);
     } catch (err: any) {
       setError(err.message);
+    } finally {
       setLoading(false);
     }
   };
-
+  
   const handleGoogleSignIn = async () => {
     setLoading('google');
     setError(null);
@@ -79,45 +84,68 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted/20">
-      <div className="mx-auto grid w-[350px] gap-6">
-        <div className="grid gap-2 text-center">
-          <ShieldCheck className="h-10 w-10 mx-auto text-primary" />
-          <h1 className="text-3xl font-bold">Sign Up</h1>
-          <p className="text-balance text-muted-foreground">
-            Create your TunnelVista account
-          </p>
+    <div className="flex items-center justify-center min-h-screen bg-gray-900 text-white">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md p-8 space-y-6 bg-gray-800 rounded-lg shadow-lg"
+      >
+        <div className="text-center">
+          <h1 className="text-3xl font-bold">Create an Account</h1>
+          <p className="text-gray-400">Join TunnelVista today!</p>
         </div>
-        <form onSubmit={handleSignup} className="grid gap-4">
-          <div className="grid gap-2">
+
+        {error && (
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="p-3 mb-4 text-sm text-red-700 bg-red-100 rounded-lg"
+            role="alert"
+          >
+            {error}
+          </motion.div>
+        )}
+
+        <form onSubmit={handleSignUp} className="space-y-6">
+          <div>
+            <Label htmlFor="displayName">Display Name</Label>
+            <Input
+              id="displayName"
+              type="text"
+              value={displayName}
+              onChange={(e) => setDisplayName(e.target.value)}
+              placeholder="Your Name"
+              required
+              className="mt-1 bg-gray-700 border-gray-600 placeholder-gray-500"
+            />
+          </div>
+          <div>
             <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
-              placeholder="m@example.com"
-              required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              disabled={!!loading}
+              placeholder="you@example.com"
+              required
+              className="mt-1 bg-gray-700 border-gray-600 placeholder-gray-500"
             />
           </div>
-          <div className="grid gap-2">
+          <div>
             <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
-              required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              disabled={!!loading}
+              placeholder="••••••••"
+              required
+              className="mt-1 bg-gray-700 border-gray-600 placeholder-gray-500"
             />
           </div>
-          {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           <Button type="submit" className="w-full" disabled={!!loading}>
-            {loading === true && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            Create Account
+            {loading === true ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Sign Up'}
           </Button>
         </form>
         <div className="relative">
@@ -125,14 +153,14 @@ export default function SignupPage() {
             <span className="w-full border-t" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
+            <span className="bg-gray-800 px-2 text-gray-400">
               Or continue with
             </span>
           </div>
         </div>
         <Button
           variant="outline"
-          className="w-full"
+          className="w-full bg-gray-700 border-gray-600 hover:bg-gray-600"
           onClick={handleGoogleSignIn}
           disabled={!!loading}
         >
@@ -143,13 +171,17 @@ export default function SignupPage() {
           )}
           Google
         </Button>
-        <div className="mt-4 text-center text-sm">
-          Already have an account?{' '}
-          <Link href="/auth/login" className="underline">
-            Log in
-          </Link>
+        <div className="text-center text-gray-400">
+          <p>
+            Already have an account?{' '}
+            <Link href="/auth/login" className="text-blue-400 hover:underline">
+              Log in
+            </Link>
+          </p>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
-}
+};
+
+export default SignUpPage;
